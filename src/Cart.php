@@ -19,29 +19,39 @@ class Cart
     public function show()
     {
         if (empty($this->elements)) {
-            $result = 'お客様のショッピングカートに商品はありません。';
-        } else {
-            $amount = 0;
-            $totalQuantity = 0;
-
-            $result = '';
-            foreach ($this->elements as $element) {
-                if (! $element->getQuantity()) {
-                    continue;
-                } else {
-                    $result .= $element->getProduct()->getTitle() . "\t" . $element->getProduct()->getPrice() . "\t" . $element->getQuantity() . "\r\n";
-                    $amount += $element->getProduct()->getPrice() * $element->getQuantity();
-                    $totalQuantity += $element->getQuantity();
-                }
-            }
-
-            if ($totalQuantity) {
-                $result .= '小計 ('.$totalQuantity.' 点): \\'.$amount;
-            } else {
-                $result = 'お客様のショッピングカートに商品はありません。';
-            }
+            return 'お客様のショッピングカートに商品はありません。';
         }
 
+        $result = $this->showText();
+
         return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function showText(): string
+    {
+        $text = '';
+        $amount = 0;
+        $totalQuantity = 0;
+
+        foreach ($this->elements as $element) {
+            $title = $element->getProduct()->getTitle();
+            $price = $element->getProduct()->getPrice();
+            $quantity = $element->getQuantity();
+
+            $text .= $title . "\t" . $price . "\t" . $quantity . "\r\n";
+            $amount += $price * $quantity;
+            $totalQuantity += $quantity;
+        }
+
+        if ($totalQuantity) {
+            $text .= '小計 ('.$totalQuantity.' 点): \\'.$amount;
+        } else {
+            $text = 'お客様のショッピングカートに商品はありません。';
+        }
+
+        return $text;
     }
 }

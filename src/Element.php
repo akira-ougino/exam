@@ -6,7 +6,7 @@ class Element
 {
     private $product;
 
-    private $quantity;
+    private $quantity = 0;
 
     public function __construct(Product $product, int $quantity)
     {
